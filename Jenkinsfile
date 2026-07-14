@@ -79,27 +79,23 @@ pipeline {
     }
 
     failure {
-        echo 'El pipeline falló. Revisa los logs de la etapa correspondiente.'
+    echo 'El pipeline falló. Revisa los logs de la etapa correspondiente.'
 
-        emailext(
-            to: 'alfonso040927@gmail.com',
-            subject: "Build fallido: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            mimeType: 'text/html',
-            body: """
-                <h2>El pipeline de Jenkins falló</h2>
+    mail(
+        to: 'alfonso040927@gmail.com',
+        subject: "Build fallido: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+        body: """
+El pipeline de Jenkins falló.
 
-                <p><strong>Proyecto:</strong> ${env.JOB_NAME}</p>
-                <p><strong>Build:</strong> #${env.BUILD_NUMBER}</p>
-                <p><strong>Resultado:</strong> FAILURE</p>
-                <p><strong>Rama:</strong> ${env.BRANCH_NAME}</p>
+Proyecto: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Rama: ${env.BRANCH_NAME}
 
-                <p>
-                    Revisa la consola del build:
-                    <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a>
-                </p>
-            """
-        )
-    }
+Revisa la consola:
+${env.BUILD_URL}console
+"""
+    )
+}
 
     always {
         echo "Build #${env.BUILD_NUMBER} finalizado."
